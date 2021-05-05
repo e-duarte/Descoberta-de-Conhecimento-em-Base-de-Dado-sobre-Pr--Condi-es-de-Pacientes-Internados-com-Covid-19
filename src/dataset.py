@@ -171,57 +171,5 @@ class CovidDataWarehouse:
 
 if __name__ == '__main__':
     from sklearn.cluster import KMeans
-    # covid = pd.read_csv('data/covid.csv')
-
-    # state = list(
-    #         map(
-    #             lambda x: 'recovered' if x == '9999-99-99' else 'died',
-    #             covid['date_died']
-    #         )
-    #     )
-
-    
-    # covid['state'] = state
-    
-    # entry_date = list(
-    #         map(
-    #             lambda x: x if x == '9999-99-99' else f'{x.split("-")[2]}-{x.split("-")[1]}-{x.split("-")[0]}',
-    #             covid['entry_date']
-    #         )
-    #     )
-
-    # covid['entry_date'] = entry_date
-
-    # date_symptoms = list(
-    #         map(
-    #             lambda x: x if x == '9999-99-99' else f'{x.split("-")[2]}-{x.split("-")[1]}-{x.split("-")[0]}',
-    #             covid['date_symptoms']
-    #         )
-    #     )
-    
-    # covid['date_symptoms'] = date_symptoms
-
-    # date_died = list(
-    #         map(
-    #             lambda x: x if x == '9999-99-99' else f'{x.split("-")[2]}-{x.split("-")[1]}-{x.split("-")[0]}',
-    #             covid['date_died']
-    #         )
-    #     )
-    
-    # covid['date_died'] = date_died
-
-    # covid.to_csv('data/preocessed-covid.csv', index_label=False)
-
+   
     CovidDataWarehouse().covid.to_csv('data/preocessed-covid.csv', index=False)
-
-    
-    
-    # X = covid.covid
-
-    # exit()
-
-    # print('aplying K-MEANS')
-    # kmeans = KMeans(n_clusters=3, random_state=0).fit(X)
-    # clusters = kmeans.fit_predict(X)
-
-    # print(clusters)
