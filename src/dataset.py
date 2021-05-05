@@ -85,48 +85,134 @@ class CovidDataset:
 
         return died
 
+
+
+class CovidDataWarehouse:
+    def __init__(self):
+        covid = pd.read_csv('data/covid.csv')
+
+        covid['sex'] = list(
+                map(
+                    lambda x: 'female' if x == 1 else 'male',
+                    covid['sex']
+                )
+            )
+
+        covid['patient_type'] = list(
+                map(
+                    lambda x: 'not-hospitalized' if x == 1 else 'hospitalized',
+                    covid['patient_type']
+                )
+            )
+
+        columns = covid.columns.tolist()
+        columns = list(set(columns) - set(['id', 'sex', 'patient_type', 'entry_date', 'date_symptoms', 'date_died', 'age']))
+        
+
+        for c in columns:
+            covid[c] = list(
+                map(
+                    self.to_map,
+                    covid[c]
+                )
+            )
+
+
+        state = list(
+                map(
+                    lambda x: 'recovered' if x == '9999-99-99' else 'died',
+                    covid['date_died']
+                )
+            )
+
+        
+        covid['state'] = state
+        
+        entry_date = list(
+                map(
+                    lambda x: x if x == '9999-99-99' else f'{x.split("-")[2]}-{x.split("-")[1]}-{x.split("-")[0]}',
+                    covid['entry_date']
+                )
+            )
+
+        covid['entry_date'] = entry_date
+
+        date_symptoms = list(
+                map(
+                    lambda x: x if x == '9999-99-99' else f'{x.split("-")[2]}-{x.split("-")[1]}-{x.split("-")[0]}',
+                    covid['date_symptoms']
+                )
+            )
+        
+        covid['date_symptoms'] = date_symptoms
+
+        date_died = list(
+                map(
+                    lambda x: x if x == '9999-99-99' else f'{x.split("-")[2]}-{x.split("-")[1]}-{x.split("-")[0]}',
+                    covid['date_died']
+                )
+            )
+        
+        covid['date_died'] = date_died
+        print(covid)
+
+        self.covid = covid
+
+    def to_map(self, x):
+        if x == 1:
+            return 'yes'
+        elif x == 2:
+            return 'no'
+        else:
+            return 'not-specified'
+
+
+
+
 if __name__ == '__main__':
     from sklearn.cluster import KMeans
-    covid = pd.read_csv('data/covid.csv')
+    # covid = pd.read_csv('data/covid.csv')
 
-    state = list(
-            map(
-                lambda x: 'recovered' if x == '9999-99-99' else 'died',
-                covid['date_died']
-            )
-        )
+    # state = list(
+    #         map(
+    #             lambda x: 'recovered' if x == '9999-99-99' else 'died',
+    #             covid['date_died']
+    #         )
+    #     )
 
     
-    covid['state'] = state
+    # covid['state'] = state
     
-    entry_date = list(
-            map(
-                lambda x: x if x == '9999-99-99' else f'{x.split("-")[2]}-{x.split("-")[1]}-{x.split("-")[0]}',
-                covid['entry_date']
-            )
-        )
+    # entry_date = list(
+    #         map(
+    #             lambda x: x if x == '9999-99-99' else f'{x.split("-")[2]}-{x.split("-")[1]}-{x.split("-")[0]}',
+    #             covid['entry_date']
+    #         )
+    #     )
 
-    covid['entry_date'] = entry_date
+    # covid['entry_date'] = entry_date
 
-    date_symptoms = list(
-            map(
-                lambda x: x if x == '9999-99-99' else f'{x.split("-")[2]}-{x.split("-")[1]}-{x.split("-")[0]}',
-                covid['date_symptoms']
-            )
-        )
+    # date_symptoms = list(
+    #         map(
+    #             lambda x: x if x == '9999-99-99' else f'{x.split("-")[2]}-{x.split("-")[1]}-{x.split("-")[0]}',
+    #             covid['date_symptoms']
+    #         )
+    #     )
     
-    covid['date_symptoms'] = date_symptoms
+    # covid['date_symptoms'] = date_symptoms
 
-    date_died = list(
-            map(
-                lambda x: x if x == '9999-99-99' else f'{x.split("-")[2]}-{x.split("-")[1]}-{x.split("-")[0]}',
-                covid['date_died']
-            )
-        )
+    # date_died = list(
+    #         map(
+    #             lambda x: x if x == '9999-99-99' else f'{x.split("-")[2]}-{x.split("-")[1]}-{x.split("-")[0]}',
+    #             covid['date_died']
+    #         )
+    #     )
     
-    covid['date_died'] = date_died
+    # covid['date_died'] = date_died
 
-    covid.to_csv('data/preocessed-covid.csv')
+    # covid.to_csv('data/preocessed-covid.csv', index_label=False)
+
+    CovidDataWarehouse().covid.to_csv('data/preocessed-covid.csv', index=False)
 
     
     
