@@ -182,19 +182,34 @@ class CovidDataWarehouse:
                     lambda x: x if x == '9999-99-99' else f'{x.split("-")[2]}-{x.split("-")[1]}-{x.split("-")[0]}',
                     covid['date_symptoms']
                 )
-            )
+        )
         
         covid['date_symptoms'] = date_symptoms
 
-        date_died = list(
+        leaving = list(
                 map(
                     lambda x: x if x == '9999-99-99' else f'{x.split("-")[2]}-{x.split("-")[1]}-{x.split("-")[0]}',
                     covid['date_died']
                 )
+        )
+
+        covid['leaving_date'] = list(
+            map(
+                lambda l_val, e_val: str(pd.to_datetime(e_val) + pd.DateOffset(days=15)).split(' ')[0] if l_val == '9999-99-99' else l_val,
+                leaving,
+                entry_date
+            
             )
-        
-        covid['date_died'] = date_died
-        print(covid)
+        )
+        # leaving_date = []
+        # for l_val, e_val in zip(leaving, entry_date):
+        #     if l_val == '9999-99-99':
+        #         leaving_date.append(str(pd.to_datetime(e_val) + pd.DateOffset(days=15)))
+        #     else:
+        #         leaving_date.append(l_val)
+
+        # covid['leaving_date'] = leaving_date
+        # # print(covid)
 
         self.covid = covid
 
@@ -211,19 +226,23 @@ if __name__ == '__main__':
     import matplotlib.pyplot as plt
 
     covid_datawarehouse = CovidDataWarehouse().covid
-    covid_datawarehouse.pop('id')
-    covid_datawarehouse.pop('age')
-    covid_datawarehouse.pop('sex')
-    covid_datawarehouse.pop('patient_type')
-    covid_datawarehouse.pop('entry_date')
-    covid_datawarehouse.pop('date_symptoms')
-    covid_datawarehouse.pop('date_died')
-    covid_datawarehouse.pop('state')
+    # print(covid_datawarehouse['leaving_date'])
 
-    covid_datawarehouse = covid_datawarehouse.drop_duplicates()
 
-    print(len(covid_datawarehouse))
-    # covid_datawarehouse.to_csv('data/preprocessed-covid.csv', index=False)
+    # print(covid_datawarehouse['leaving_date'])
+    # covid_datawarehouse.pop('id')
+    # covid_datawarehouse.pop('age')
+    # covid_datawarehouse.pop('sex')
+    # covid_datawarehouse.pop('patient_type')
+    # covid_datawarehouse.pop('entry_date')
+    # covid_datawarehouse.pop('date_symptoms')
+    # covid_datawarehouse.pop('date_died')
+    # covid_datawarehouse.pop('state')
+
+    # covid_datawarehouse = covid_datawarehouse.drop_duplicates()
+
+    # print(len(covid_datawarehouse))
+    covid_datawarehouse.to_csv('data/preprocessed-covid.csv', index=False)
     # print('Preprocessing dataset')
     # dataset = CovidDataset().covid
     # dataset.to_csv('out/covid-dataset-preprocessed.csv', index=False)
