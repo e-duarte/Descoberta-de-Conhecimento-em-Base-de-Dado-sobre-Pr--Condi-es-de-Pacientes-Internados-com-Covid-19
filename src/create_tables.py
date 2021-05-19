@@ -24,8 +24,8 @@ leaving_date_dm = dataset['leaving_date'].copy().drop_duplicates()
 # print(preconditions_dm.columns)
 
 
-# factor_tb['id_preconditions'] = [i for i in range(len(dataset))]
-# preconditions_dm['id_preconditions']  = factor_tb['id_preconditions'].copy()
+factor_tb['id_preconditions'] = [i for i in range(len(dataset))]
+preconditions_dm['id_preconditions']  = factor_tb['id_preconditions'].copy()
 
 
 
